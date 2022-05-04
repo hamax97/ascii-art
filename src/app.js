@@ -1,22 +1,24 @@
 const sharp = require('sharp');
 
-const RGB_LENGTH = 3;
+const { RGB_LENGTH } = require('./constants');
+const { averagePixelFilter } = require('./pixelFilters');
+const { brightnessConversion } = require('./brightnessConversions');
 
 async function transform() {
   const { pixelArray, width, height } = await readRawPixels();
   const pixelMatrix = createPixelMatrix(pixelArray, width, height);
   const brightnessMatrix = extractBrightnessMatrix(pixelMatrix, averagePixelFilter);
-  const asciiMatrix = convertToASCIICharacters(brightnessMatrix);
+  const asciiMatrix = convertToASCIIMatrix(brightnessMatrix, brightnessConversion);
+  printASCIIMatrix(asciiMatrix);
 }
 
 async function readRawPixels() {
   const { data, info } = await sharp('./src/.ignore/ascii-pineapple.jpg')
+    .resize(620, 320)
     .raw()
     .toBuffer({ resolveWithObject: true });
 
   const { width, height } = info;
-  console.log('Successfully loaded image!');
-  console.log(`Width: ${width}, Height: ${height}`);
 
   return {
     pixelArray: new Uint8ClampedArray(data.buffer),
@@ -28,7 +30,6 @@ async function readRawPixels() {
 function createPixelMatrix(pixelArray, width, height) {
   const pixelMatrix = new Array(height);
   for (let i = 0; i < height; i++) {
-
     pixelMatrix[i] = new Array();
     const pixelsPerRow = width * RGB_LENGTH;
     const rowOffset = i * pixelsPerRow;
@@ -40,23 +41,7 @@ function createPixelMatrix(pixelArray, width, height) {
     }
   }
 
-  console.log('Successfully created pixel matrix!');
-  console.log(`Columns: ${pixelMatrix[0].length}, Rows: ${pixelMatrix.length}`);
-
   return pixelMatrix;
-}
-
-function averagePixelFilter(pixel) {
-  const sum = pixel.reduce((acc, val) => acc + val);
-  return sum / RGB_LENGTH;
-}
-
-function lightnessPixelFilter(pixel) {
-  return (Math.max(pixel) + Math.min(pixel)) / 2;
-}
-
-function luminosityPixelFilter(pixel) {
-  return 0.21 * pixel[0] + 0.72 * pixel[1] + 0.07 * pixel[2];
 }
 
 function extractBrightnessMatrix(pixelMatrix, pixelFilter) {
@@ -64,18 +49,35 @@ function extractBrightnessMatrix(pixelMatrix, pixelFilter) {
   const brightnessMatrix = new Array(height);
 
   for (let i = 0; i < height; i++) {
-    brightnessMatrix[i] = pixelMatrix[i].map(pixel => pixelFilter(pixel));
+    brightnessMatrix[i] = pixelMatrix[i].map((pixel) => pixelFilter(pixel));
   }
-
-  console.log('Successfully created brightness matrix!');
-  console.log(`Columns: ${brightnessMatrix[0].length}, Rows: ${brightnessMatrix.length}`);
 
   return brightnessMatrix;
 }
 
-function convertToASCIICharacters(brightnessMatrix) {
-  console.log('Implement conversion stuff!!');
-  return [[]];
+function convertToASCIIMatrix(brightnessMatrix, brightnessConversion) {
+  const height = brightnessMatrix.length;
+  const asciiMatrix = new Array(height);
+
+  for (let i = 0; i < height; i++) {
+    asciiMatrix[i] = brightnessMatrix[i].map((brightness) => brightnessConversion(brightness));
+  }
+
+  return asciiMatrix;
+}
+
+function printASCIIMatrix(asciiMatrix) {
+  console.clear();
+
+  const height = asciiMatrix.length;
+  const width = asciiMatrix[0].length;
+  for (let i = 0; i < height; i++) {
+    for (let j = 0; j < width; j++) {
+      const char = asciiMatrix[i][j];
+      process.stdout.write(`${char}${char}${char}`);
+    }
+    process.stdout.write('\n');
+  }
 }
 
 transform();
