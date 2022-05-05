@@ -1,11 +1,7 @@
 module.exports = { getResizeValues };
 
 function getResizeValues(resolution) {
-  if (!resolution) {
-    return [getPixelSize(1920), getPixelSize(1080)];
-  } else if (typeof resolution !== 'string') {
-    throwInvalidResolution();
-  } else if (!resolution.includes('x')) {
+  if (typeof resolution !== 'string' || !resolution.includes('x')) {
     throwInvalidResolution();
   }
 
