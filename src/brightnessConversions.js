@@ -2,7 +2,9 @@ const asciiArray = '`^",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW
 const brightnessNumValues = 256;
 const asciiMapFactor = brightnessNumValues / asciiArray.length;
 
-module.exports.brightnessConversion = function (brightness) {
+module.exports = { brightnessConversion };
+
+function brightnessConversion(brightness) {
   if (brightness === 0) {
     return asciiArray[brightness];
   } else if (brightness === 255) {
@@ -10,4 +12,4 @@ module.exports.brightnessConversion = function (brightness) {
   }
 
   return asciiArray[Math.round(brightness / asciiMapFactor)];
-};
+}
