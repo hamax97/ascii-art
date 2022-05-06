@@ -11,6 +11,8 @@ Tech stack used:
 
 ## Run
 
+![Animation](images/animation.gif).
+
 Show help:
 
 ```bash
