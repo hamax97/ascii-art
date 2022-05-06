@@ -4,7 +4,7 @@ module.exports = { averagePixelFilter, lightnessPixelFilter, luminosityPixelFilt
 
 function averagePixelFilter(pixel) {
   const sum = pixel.reduce((acc, val) => acc + val);
-  return Math.round(sum / RGB_LENGTH);
+  return sum / RGB_LENGTH;
 }
 
 function lightnessPixelFilter(pixel) {

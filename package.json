@@ -5,7 +5,8 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:cov": "jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -14,12 +15,15 @@
   "author": "Hamilton Tobon Mosquera",
   "license": "MIT",
   "dependencies": {
+    "joi": "^17.6.0",
     "sharp": "^0.30.4",
     "yargs": "^17.4.1"
   },
   "devDependencies": {
+    "@types/jest": "^27.5.0",
     "eslint": "^8.14.0",
     "eslint-config-prettier": "^8.5.0",
+    "jest": "^28.0.3",
     "prettier": "^2.6.2"
   }
 }

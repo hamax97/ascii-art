@@ -3,9 +3,9 @@ const { transform } = require('./pipeline');
 
 async function app() {
   try {
-    await transform(argv.imagePath, { resolution: argv.resolution, imagePath: argv.imagePath });
+    await transform(argv.imagePath, { screenResolution: argv.screenResolution });
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
     process.exit(1);
   }
 }

@@ -8,7 +8,7 @@ const argv = yargs
     requiresArg: true,
   })
   .demandOption('imagePath')
-  .option('resolution', {
+  .option('screenResolution', {
     alias: 'r',
     description: 'Screen resolution in format: <width>x<height>',
     type: 'string',

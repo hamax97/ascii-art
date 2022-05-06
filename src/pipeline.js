@@ -8,19 +8,18 @@ const { getResizeValues } = require('./utils');
 module.exports = { transform };
 
 async function transform(imagePath, options) {
-  const { pixelArray, width, height } = await readRawPixels(imagePath, options.resolution);
+  const { pixelArray, width, height } = await readRawPixels(imagePath, options.screenResolution);
   const pixelMatrix = createPixelMatrix(pixelArray, width, height);
   const brightnessMatrix = extractBrightnessMatrix(pixelMatrix, averagePixelFilter);
   const asciiMatrix = convertToASCIIMatrix(brightnessMatrix, brightnessConversion);
   printASCIIMatrix(asciiMatrix);
 }
 
-async function readRawPixels(imagePath, resolution) {
-  const { data, info } = await sharp(imagePath)
-    .resize(...getResizeValues(resolution))
-    .raw()
-    .toBuffer({ resolveWithObject: true });
+async function readRawPixels(imagePath, screenResolution) {
+  const originalImage = sharp(imagePath);
+  const resizedImage = await resizeImage(originalImage, screenResolution);
 
+  const { data, info } = await resizedImage.raw().toBuffer({ resolveWithObject: true });
   const { width, height } = info;
 
   return {
@@ -28,6 +27,19 @@ async function readRawPixels(imagePath, resolution) {
     width: width,
     height: height,
   };
+}
+
+async function resizeImage(image, screenResolution) {
+  const { width: originalWidth, height: originalHeight } = await image.metadata();
+  const [targetWidth, targetHeight] = getResizeValues(screenResolution);
+  const width = originalWidth > targetWidth ? targetWidth : originalWidth;
+  const height = originalHeight > targetHeight ? targetHeight : originalHeight;
+
+  if (width !== originalWidth || height !== originalHeight) {
+    return image.resize(width, height);
+  }
+
+  return image;
 }
 
 function createPixelMatrix(pixelArray, width, height) {
@@ -52,7 +64,7 @@ function extractBrightnessMatrix(pixelMatrix, pixelFilter) {
   const brightnessMatrix = new Array(height);
 
   for (let i = 0; i < height; i++) {
-    brightnessMatrix[i] = pixelMatrix[i].map((pixel) => pixelFilter(pixel));
+    brightnessMatrix[i] = pixelMatrix[i].map((pixel) => Math.round(pixelFilter(pixel)));
   }
 
   return brightnessMatrix;
