@@ -5,7 +5,14 @@ const { averagePixelFilter } = require('./pixelFilters');
 const { brightnessConversion } = require('./brightnessConversions');
 const { getResizeValues } = require('./utils');
 
-module.exports = { transform };
+module.exports = {
+  transform,
+  readRawPixels,
+  createPixelMatrix,
+  extractBrightnessMatrix,
+  convertToASCIIMatrix,
+  printASCIIMatrix,
+};
 
 async function transform(imagePath, options) {
   const { pixelArray, width, height } = await readRawPixels(imagePath, options.screenResolution);

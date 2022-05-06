@@ -1,11 +1,16 @@
-const { uint8Validator } = require('./validators');
-const { brightnessConversion } = require('./brightnessConversions');
+const { uint8Validator } = require('src/validators');
+const { brightnessConversion } = require('src/brightnessConversions');
 
-jest.mock('./validators');
+const { expectValidationError } = require('./helpers');
 
 describe('brightnessConversion', () => {
+  let spyUint8Validator;
   beforeEach(() => {
-    uint8Validator.validate = jest.fn().mockReturnValue({ error: null });
+    spyUint8Validator = jest.spyOn(uint8Validator, 'validate');
+  });
+
+  afterEach(() => {
+    spyUint8Validator.mockRestore();
   });
 
   test('maps correctly from brightness number to ascii character', () => {
@@ -19,18 +24,19 @@ describe('brightnessConversion', () => {
   });
 
   test('handles wrong input', () => {
-    uint8Validator.validate = jest
-      .fn()
-      .mockReturnValue({ error: 'Fake validation error' });
-
     expect(() => brightnessConversion()).toThrowError();
+    expectValidationError(spyUint8Validator);
     expect(() => brightnessConversion(null)).toThrowError();
+    expectValidationError(spyUint8Validator);
     expect(() => brightnessConversion('asd')).toThrowError();
+    expectValidationError(spyUint8Validator);
     expect(() => brightnessConversion(-1)).toThrowError();
+    expectValidationError(spyUint8Validator);
     expect(() => brightnessConversion(256)).toThrowError();
+    expectValidationError(spyUint8Validator);
     expect(() => brightnessConversion({})).toThrowError();
+    expectValidationError(spyUint8Validator);
     expect(() => brightnessConversion(new Number(1))).toThrowError();
-
-    expect(uint8Validator.validate).toHaveBeenCalledTimes(7);
+    expectValidationError(spyUint8Validator);
   });
 });

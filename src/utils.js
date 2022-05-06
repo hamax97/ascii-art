@@ -1,5 +1,5 @@
 const {
-  resolutionStrValidator,
+  screenResolutionStrValidator,
   screenWidthValidator,
   screenHeightValidator,
 } = require('./validators');
@@ -7,7 +7,7 @@ const {
 module.exports = { getResizeValues };
 
 function getResizeValues(resolution) {
-  const { error } = resolutionStrValidator.validate(resolution);
+  const { error } = screenResolutionStrValidator.validate(resolution);
   if (error) {
     throw new InvalidResolutionError(error);
   }
