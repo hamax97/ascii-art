@@ -7,7 +7,7 @@ Implemented based on this [guide](https://robertheaton.com/2018/06/12/programmin
 Tech stack used:
 - NodeJS.
 - Jest.
-- Joi.
+- Joi, for parameter validation.
 
 ## Install
 
@@ -17,7 +17,7 @@ npm install
 
 ## Run
 
-![Animation](images/animation.gif)
+![Usage gif](images/animation.gif)
 
 Show help:
 
