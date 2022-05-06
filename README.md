@@ -17,7 +17,7 @@ npm install
 
 ## Run
 
-![Animation](images/animation.gif).
+![Animation](images/animation.gif)
 
 Show help:
 
