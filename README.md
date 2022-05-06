@@ -9,6 +9,12 @@ Tech stack used:
 - Jest.
 - Joi.
 
+## Install
+
+```bash
+npm install
+```
+
 ## Run
 
 ![Animation](images/animation.gif).
