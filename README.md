@@ -6,6 +6,7 @@ Implemented based on this [guide](https://robertheaton.com/2018/06/12/programmin
 
 Tech stack used:
 - NodeJS.
+- [Sharp](https://sharp.pixelplumbing.com/).
 - Jest.
 - Joi, for parameter validation.
 
@@ -55,7 +56,7 @@ The cross of Christ:
 Mario Bros:
 
 <p align="center">
-  <img alt="Mario Bros" src="./images/mario-bros.jpg" style="border:1px solid black;" width="45%">
+  <img alt="Mario Bros" src="./images/mario-bros.jpg" style="border:5px solid black;" width="45%">
 &nbsp; &nbsp; &nbsp;
   <img alt="Mario Bros ASCII" src="./images/mario-bros-ascii.jpg" width="45%">
 </p>
